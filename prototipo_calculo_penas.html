@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototipo: Cálculo de Penas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            font-weight: bold;
+            color: #007bff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cálculo de Penas</h1>
+        <form id="penaForm">
+            <label for="extremoMayor">Extremo Mayor (años):</label>
+            <input type="number" id="extremoMayor" placeholder="Ingrese el extremo mayor">
+
+            <label for="extremoMenor">Extremo Menor (años):</label>
+            <input type="number" id="extremoMenor" placeholder="Ingrese el extremo menor">
+
+            <label for="agravantes">Número de Agravantes del Tipo Penal:</label>
+            <input type="number" id="agravantes" placeholder="Ingrese el número de agravantes">
+
+            <label for="configuradas">Agravantes Configuradas en el Caso:</label>
+            <input type="number" id="configuradas" placeholder="Ingrese las agravantes configuradas">
+
+            <button type="button" onclick="calcularPena()">Calcular Pena</button>
+        </form>
+        <div class="result" id="resultado"></div>
+    </div>
+
+    <script>
+        function calcularPena() {
+            const extremoMayor = parseFloat(document.getElementById('extremoMayor').value);
+            const extremoMenor = parseFloat(document.getElementById('extremoMenor').value);
+            const agravantes = parseInt(document.getElementById('agravantes').value);
+            const configuradas = parseInt(document.getElementById('configuradas').value);
+
+            if (isNaN(extremoMayor) || isNaN(extremoMenor) || isNaN(agravantes) || isNaN(configuradas)) {
+                document.getElementById('resultado').textContent = 'Por favor, complete todos los campos con valores válidos.';
+                return;
+            }
+
+            const diferencia = (extremoMayor - extremoMenor) * 12; // Diferencia en meses
+            const ajustePorAgravante = diferencia / agravantes;
+            const penaEnMeses = extremoMenor * 12 + ajustePorAgravante * configuradas;
+
+            const penaFinalAnios = Math.floor(penaEnMeses / 12);
+            const penaFinalMeses = Math.round(penaEnMeses % 12);
+
+            document.getElementById('resultado').textContent = 
+                `La pena calculada es de ${penaFinalAnios} años y ${penaFinalMeses} meses.`;
+        }
+    </script>
+</body>
+</html>
